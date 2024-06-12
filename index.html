@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDF Extractor</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+  <script>
+    async function extractAndSaveText() {
+      const { PDFDocument } = PDFLib;
+      const url = 'https://articulateusercontent.com/rise/courses/MR5C0RMk0tP6-S-Fc6MartouvPpnSNWJ/wXtIAO1ahKYG25n2-Reflections%2520on%2520your%2520person.pdf';
+      const existingPdfBytes = await fetch(url).then(res => res.arrayBuffer());
+      const pdfDoc = await PDFDocument.load(existingPdfBytes);
+      const firstPage = pdfDoc.getPage(0);
+      const { textContent } = await firstPage.getTextContent();
+      const extractedText = textContent.items.map(item => item.str).join(' ');
+      localStorage.setItem('extractedText', extractedText);
+      console.log('Extracted Text:', extractedText);
+    }
+  </script>
+</head>
+<body>
+  <button onclick="extractAndSaveText()">Produce PDF</button>
+</body>
+</html>
